@@ -57,6 +57,16 @@ p {
     border-style: solid;
 }
 
+.dark-mode {
+    background-color: #010101;
+    color: lightyellow;
+}
+
+.light-mode {
+    background-color: white;
+    color: black;
+}
+
 select {
     text-align: center;
     min-width: 160px;
