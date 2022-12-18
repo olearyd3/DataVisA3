@@ -13,29 +13,34 @@
     </head>
     <body>
         <h1>Data Visualisation of the QS Top 1000 World University Rankings 2023</h1>
-        <div id='dropdown'></div>
+        
         <div class = "flexdiv">
-            <div id='visualisation-container'></div>
+            <div id='visualisation-container'>
+                <div id='dropdown'></div>
+            </div>
             <div id="middle">
-                <p>MIDDLE DIV</p>
             </div>
             <div id="worldmap">
-                <svg id="my_dataviz" width="800" height="450"></svg>
+                <svg id="mapsvg" width="800" height="450"></svg>
             </div>
         </div>
         <div id="key">
-            <p>KEY: <br />
-                AR = Academic Reputation <br />
-                ER = Employer Reputation <br />
-                FSR = Faculty-Student Reputation <br />
-                CPF = Citations per Faculty <br />
-                IFR = International Faculty Reputation <br />
-                ISR = International Student Reputation <br />
-                IRN = International Research Network Score <br />
-                GER = Employment Outcome Score <br />
+            <p>KEY:
+                AR = Academic Reputation, 
+                ER = Employer Reputation, 
+                FSR = Faculty Student Ratio, 
+                CPF = Citations per Faculty, <br />
+                IFR = International Faculty Ratio, 
+                ISR = International Students Ratio, 
+                IRN = International Research Network, 
+                GER = Employment Outcomes <br />
             </p>
         </div>
-        <script type="text/javascript">
+        <div class="bottomDiv">
+            <svg id="nextChart" width=95% height="250">
+            </svg>
+        </div>
+        <script>
             // load the CSV
             var fileName = "universityRankings.csv";
             // array of the values for the barchart
@@ -47,7 +52,10 @@
             "isr score",
             "irn score",
             "ger score"];
-
+            var fullFieldNames = 
+            ["Academic Reputation", "Employer Reputation", "Faculty Student Ratio",
+            "Citations per Faculty", "International Faculty Ratio", "International Students Ratio",
+            "International Research Network", "Employment Outcomes"];
             d3.csv(fileName, function(error, data) {
                 var universityMap = {};
                 data.forEach(function(d) {
@@ -65,10 +73,10 @@
 
             var makeBarChart = function(universityMap) {
                 // Define dimensions of vis
-                var margin = { top: 50, right: 50, bottom: 50, left: 50 },
+                var margin = { top: 20, right: 50, bottom: 50, left: 50 },
                     width  = 700 - margin.left - margin.right,
                     height = 450 - margin.top  - margin.bottom;
-
+                    
                 // Make x scale
                 var xScale = d3.scaleBand()
                     .domain(fields)
@@ -86,7 +94,7 @@
                         .attr("width",  width  + margin.left + margin.right)
                         .attr("height", height + margin.top  + margin.bottom)
                     .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
                 // x-axis labels 
                 let tickLabels = 
@@ -165,7 +173,32 @@
                                 return height - yScale(d); 
                             })
                             .on("mouseover", function(d) {
-                                tooltip.html(d); 
+                                let pos = d3.mouse(this);
+                                //console.log(pos[0]);
+                                if(pos[0] >= 13 && pos[0] <= 74) {
+                                    tooltip.html(fullFieldNames[0] + ": " + d); 
+                                }
+                                if(pos[0] >= 86 && pos[0] <= 148) {
+                                    tooltip.html(fullFieldNames[1] + ": " + d); 
+                                }
+                                if(pos[0] >= 159 && pos[0] <= 221) {
+                                    tooltip.html(fullFieldNames[2] + ": " + d); 
+                                }
+                                if(pos[0] >= 232 && pos[0] <= 294) {
+                                    tooltip.html(fullFieldNames[3] + ": " + d); 
+                                }
+                                if(pos[0] >= 305 && pos[0] <= 367) {
+                                    tooltip.html(fullFieldNames[4] + ": " + d); 
+                                }
+                                if(pos[0] >= 378 && pos[0] <= 440) {
+                                    tooltip.html(fullFieldNames[5] + ": " + d); 
+                                }
+                                if(pos[0] >= 451 && pos[0] <= 513) {
+                                    tooltip.html(fullFieldNames[6] + ": " + d); 
+                                }
+                                if(pos[0] >= 525 && pos[0] <= 586) {
+                                    tooltip.html(fullFieldNames[7] + ": " + d); 
+                                }
                                 return tooltip.style("visibility", "visible");
                             })
                             .on("mousemove", function() {
@@ -300,35 +333,16 @@
                 // topo is the data received from the d3.queue function (the world.geojson)
                 // the data from world_population.csv (country code and country population) is saved in data variable
 
-                let mouseOver = function(d) {
-                    d3.selectAll(".Country")
-                        .transition()
-                        .duration(200)
-                        .style("opacity", .5)
-                        .style("stroke", "transparent");
-                    d3.select(this)
-                        .transition()
-                        .duration(200)
-                        .style("opacity", 1)
-                        .style("stroke", "black");
-                    tooltip.style("left", (d3.event.pageX + 15) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px")
-                        .transition().duration(400)
-                        .style("opacity", 1)
-                        .text(d.properties.name + ': ' + numUniversitiesPerCountry(d) + ' universities in the Top 1000');
-                    displayNumUniversities(d)
-                   // numUniversitiesPerCountry(d);
-                }
-
-                let mouseLeave = function() {
-                    d3.selectAll(".Country")
-                        .transition()
-                        .duration(200)
-                        .style("opacity", 1)
-                        .style("stroke", "transparent");
-                    tooltip.transition().duration(300)
-                        .style("opacity", 0);
-                }
+                // create tooltip when hovering
+                var ToolTip = d3.select("body").append("div")   
+                    .attr("id", "ToolTip")    
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("background", "#D3D3D3")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")           
+                    .text("ToolTip");
 
                 // Draw the map
                 world = svg.append("g")
@@ -349,7 +363,7 @@
                     // set the color of each country
                     .attr("fill", function(d) {
                         d.total = numUniversitiesPerCountry(d);
-                        console.log("Total data: ", d.properties.name, ": ", d.total);
+                        //console.log("Total data: ", d.properties.name, ": ", d.total);
                         return colorScale(d.total);
                     })
 
@@ -362,8 +376,17 @@
                         return d.id
                     })
                     .style("opacity", 1)
-                    .on("mouseover", mouseOver)
-                    .on("mouseleave", mouseLeave);
+                    .on("mouseover", function(d) {
+                        ToolTip.html(d.properties.name + ": " + d.total); 
+                        return ToolTip.style("visibility", "visible");
+                    })
+                    .on("mousemove", function() {
+                        return ToolTip.style("top", (d3.event.pageY-10) +"px")
+                        .style("left", (d3.event.pageX+10) +"px");
+                    })               
+                    .on("mouseout", function() {
+                        return ToolTip.style("visibility", "hidden");
+                    });
             
                 // Legend
                 const x = d3.scaleLinear()
@@ -412,6 +435,9 @@
 
                 legend.append("text").attr("x", 15).attr("y", 280).text("Number of Top 1000 Universities");
             }
+        </script>
+        <script>
+             
         </script>
     </body>
 </html>

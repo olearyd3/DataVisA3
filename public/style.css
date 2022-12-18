@@ -14,27 +14,47 @@ body {
 
 #visualisation-container {
     flex: 1;
-  /*  border-style: solid;
-    border-width: 3px;
-    border-color: black;*/
+    padding-left: 50px;
+    /*border-radius: 3px;
+    border-color: #000;
+    border-style: solid;*/
 }
 
 #middle {
-    /*  border-style: solid;
-    border-width: 3px;
-    border-color: black;*/
-    flex: 1;
+    flex: 3;
 }
 
+
 #worldmap {
-    /*  border-style: solid;
-    border-width: 3px;
-    border-color: black;*/
-    flex: 3;
+    flex: 1;
+    padding-right: 70px;
+}
+
+#barcharth3 {
+    padding-left: 110px;
 }
 
 #dropdown {
     padding-left: 75px;
+}
+
+#key {
+    padding-left: 50px;
+    padding-bottom: 15px;
+}
+
+p {
+    font-size: 12px;
+}
+
+.bottomDiv {
+    padding-left: 75px;
+}
+
+#nextChart {
+    border-radius: 3px;
+    border-color: #000;
+    border-style: solid;
 }
 
 select {
