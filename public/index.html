@@ -7,7 +7,9 @@
         <title>CSU44056 Assignment 3</title>
         <link rel="stylesheet" href="style.css">
         <!-- USE D3 for the visualisation -->
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="http://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     </head>
     <body>
         <h1>Data Visualisation of the QS World University Rankings 2023</h1>
@@ -18,7 +20,7 @@
                 <p>MIDDLE DIV</p>
             </div>
             <div id="worldmap">
-                <p>FLEX DIV</p>
+                <svg id="my_dataviz" width="800" height="450"></svg>
             </div>
         </div>
         <div id="key">
@@ -35,21 +37,21 @@
         </div>
         <script type="text/javascript">
             // load the CSV
-            var fileName = "universities.csv";
+            var fileName = "universityRankings.csv";
             // array of the values for the barchart
-            var fields = ["ar_score",
-            "er-score",
-            "fsr-score",
-            "cpf-score",
-            "ifr-score",
-            "isr-score",
-            "irn-score",
-            "ger-score"];
+            var fields = ["ar score",
+            "er score",
+            "fsr score",
+            "cpf score",
+            "ifr score",
+            "isr score",
+            "irn score",
+            "ger score"];
 
             d3.csv(fileName, function(error, data) {
                 var universityMap = {};
                 data.forEach(function(d) {
-                    var university = d.Name;
+                    var university = d.institution;
                    // console.log(university);
                     universityMap[university] = [];
 
@@ -68,12 +70,13 @@
                     height = 450 - margin.top  - margin.bottom;
 
                 // Make x scale
-                var xScale = d3.scale.ordinal()
+                var xScale = d3.scaleBand()
                     .domain(fields)
-                    .rangeRoundBands([0, width], 0.1);
+                    .rangeRound([0, width])
+                    .padding(0.15);
 
                 // Make y scale of the y-axis go from 0-100
-                var yScale = d3.scale.linear()
+                var yScale = d3.scaleLinear()
                     .domain([0, 100])
                     .range([height, 0]);
 
@@ -96,9 +99,8 @@
                 'IRN',
                 'GER'];
                 // Make the x-axis
-                var xAxis = d3.svg.axis()
+                var xAxis = d3.axisBottom()
                     .scale(xScale)
-                    .orient("bottom")
                     .tickFormat((d,i) => tickLabels[i]);;
                       
                 var xAxisHandleForUpdate = canvas.append("g")
@@ -126,9 +128,9 @@
                     .text("Tooltip");
 
                 // Make y-axis
-                var yAxis = d3.svg.axis()
+                var yAxis = d3.axisLeft()
                     .scale(yScale)
-                    .orient("left");
+;
 
                 var yAxisHandleForUpdate = canvas.append("g")
                     .attr("class", "y axis")
@@ -153,11 +155,10 @@
                         .append("rect")
                             .attr("class", "bar")
                             .attr("x", function(d,i) { return xScale( fields[i] ); })
-                            .attr("width", xScale.rangeBand())
+                            .attr("width", xScale.bandwidth())
                             .attr("y", function(d,i) { return yScale(d); })
                             .attr("height", function(d,i) { return height - yScale(d); })
                             .on("mouseover", function(d) {
-                                // edit d.name to include other info to be displayed too
                                 tooltip.html(d); 
                                 return tooltip.style("visibility", "visible");
                             })
@@ -205,6 +206,188 @@
                 var initialData = universityMap[uniNames[0]];
                 updateBars(initialData);
             };
+        </script>
+        <script>
+            const svg = d3.select("svg"),
+                width = svg.attr("width"),
+                height = svg.attr("height"),
+                path = d3.geoPath(),
+                data = d3.map(),
+                worldmap = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
+                worldpopulation = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv";
+
+            let centered, world;
+
+            var fileName = "universityRankings.csv";
+            var uniNames;
+            d3.csv(fileName, function(error, data) {
+                var universityMap = {};
+                data.forEach(function(d) {
+                    var university = d.location;
+                   // console.log(university);
+                    universityMap[university] = [];
+                    fields.forEach(function(field) {
+                        universityMap[university].push( +d[field] );
+                    });
+                });
+                uniNames = Object.keys(universityMap);
+                console.log(uniNames);
+                //numUniversitiesPerCountry(uniNames);
+            });
+
+            function numUniversitiesPerCountry(d) {
+                for(let i = 0; i < Object.keys(uniNames).length; i++) {
+                    if(uniNames[i] == d.properties.name) {
+                        console.log("uniNames log: ", uniNames[i]);
+                    }
+                }
+            }
+            // style of geographic projection and scaling
+            const projection = d3.geoRobinson()
+                .scale(130)
+                .translate([width / 2, height / 2]);
+
+            // Define color scale
+            const colorScale = d3.scaleThreshold()
+                .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+                .range(d3.schemeOrRd[7]);
+
+            // add tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            // Load external data and boot
+            d3.queue()
+                .defer(d3.json, worldmap)
+                .defer(d3.csv, worldpopulation, function(d) {
+                    data.set(d.code, +d.pop);
+                })
+                .await(ready);
+
+
+            // ----------------------------
+            //Start of Choropleth drawing
+            // ----------------------------
+
+            function displayNumUniversities(data) {
+                // access country names with this:
+                console.log(data.properties.name);
+            }
+            function ready(error, topo) {
+                // topo is the data received from the d3.queue function (the world.geojson)
+                // the data from world_population.csv (country code and country population) is saved in data variable
+
+                let mouseOver = function(d) {
+                    d3.selectAll(".Country")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", .5)
+                        .style("stroke", "transparent");
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 1)
+                        .style("stroke", "black");
+                    tooltip.style("left", (d3.event.pageX + 15) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px")
+                        .transition().duration(400)
+                        .style("opacity", 1)
+                        .text(d.properties.name + ': ' + Math.round((d.total / 1000000) * 10) / 10 + ' mio.');
+                    displayNumUniversities(d)
+                    numUniversitiesPerCountry(d);
+                }
+
+                let mouseLeave = function() {
+                    d3.selectAll(".Country")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 1)
+                        .style("stroke", "transparent");
+                    tooltip.transition().duration(300)
+                        .style("opacity", 0);
+                }
+
+                // Draw the map
+                world = svg.append("g")
+                .attr("class", "world");
+                world.selectAll("path")
+                    .data(topo.features)
+                    .enter()
+                    .append("path")
+                    // draw each country
+                    // d3.geoPath() is a built-in function of d3 v4 and takes care of showing the map from a properly formatted geojson file, if necessary filtering it through a predefined geographic projection
+                    .attr("d", d3.geoPath().projection(projection))
+
+                    //retrieve the name of the country from data
+                    .attr("data-name", function(d) {
+                        return d.properties.name
+                    })
+
+                    // set the color of each country
+                    .attr("fill", function(d) {
+                        d.total = data.get(d.id) || 0;
+                        return colorScale(d.total);
+                    })
+
+                    // add a class, styling and mouseover/mouseleave and click functions
+                    .style("stroke", "transparent")
+                    .attr("class", function(d) {
+                        return "Country"
+                    })
+                    .attr("id", function(d) {
+                        return d.id
+                    })
+                    .style("opacity", 1)
+                    .on("mouseover", mouseOver)
+                    .on("mouseleave", mouseLeave);
+            
+                // Legend
+                const x = d3.scaleLinear()
+                    .domain([2.6, 75.1])
+                    .rangeRound([600, 860]);
+
+                const legend = svg.append("g")
+                    .attr("id", "legend");
+
+                const legend_entry = legend.selectAll("g.legend")
+                    .data(colorScale.range().map(function(d) {
+                        d = colorScale.invertExtent(d);
+                        if (d[0] == null) d[0] = x.domain()[0];
+                        if (d[1] == null) d[1] = x.domain()[1];
+                        return d;
+                    }))
+                    .enter().append("g")
+                    .attr("class", "legend_entry");
+
+                const ls_w = 20,
+                    ls_h = 20;
+
+                legend_entry.append("rect")
+                    .attr("x", 20)
+                    .attr("y", function(d, i) {
+                        return height - (i * ls_h) - 2 * ls_h;
+                    })
+                    .attr("width", ls_w)
+                    .attr("height", ls_h)
+                    .style("fill", function(d) {
+                        return colorScale(d[0]);
+                    })
+                    .style("opacity", 0.8);
+
+                legend_entry.append("text")
+                    .attr("x", 50)
+                    .attr("y", function(d, i) {
+                        return height - (i * ls_h) - ls_h - 6;
+                    })
+                    .text(function(d, i) {
+                        if (i === 0) return "< " + d[1] / 1000000 + " m";
+                        if (d[1] < d[0]) return d[0] / 1000000 + " m +";
+                        return d[0] / 1000000 + " m - " + d[1] / 1000000 + " m";
+                    });
+
+                legend.append("text").attr("x", 15).attr("y", 280).text("Population (Million)");
+            }
         </script>
     </body>
 </html>
