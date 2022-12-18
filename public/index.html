@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>CSU44056 Assignment 3</title>
+        <link rel="stylesheet" href="style.css">
+        <!-- USE D3 for the visualisation -->
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <h1>Data Visualisation of World University Rankings 2023</h1>
+        <div id='dropdown'></div>
+        <div id='visualisation-container'></div>
+        <div id="key">
+            <p>KEY: <br />
+                AR = Academic Reputation <br />
+                ER = Employer Reputation <br />
+                FSR = Faculty-Student Reputation <br />
+                CPF = Citations per Faculty <br />
+                IFR = International Faculty Reputation <br />
+                ISR = International Student Reputation <br />
+                IRN = International Research Network Score <br />
+                GER = Employment Outcome Score <br />
+            </p>
+        </div>
+        <script type="text/javascript">
+            // load the CSV
+            var fileName = "universities.csv";
+            // array of the values for the barchart
+            var fields = ["ar_score",
+            "er-score",
+            "fsr-score",
+            "cpf-score",
+            "ifr-score",
+            "isr-score",
+            "irn-score",
+            "ger-score"];
+
+            d3.csv(fileName, function(error, data) {
+                var universityMap = {};
+                data.forEach(function(d) {
+                    var university = d.Name;
+                   // console.log(university);
+                    universityMap[university] = [];
+
+                    fields.forEach(function(field) {
+                        universityMap[university].push( +d[field] );
+                    });
+                });
+                console.log(universityMap);
+                makeVis(universityMap);
+            });
+
+            var makeVis = function(universityMap) {
+                // Define dimensions of vis
+                var margin = { top: 50, right: 50, bottom: 50, left: 50 },
+                    width  = 700 - margin.left - margin.right,
+                    height = 450 - margin.top  - margin.bottom;
+
+                // Make x scale
+                var xScale = d3.scale.ordinal()
+                    .domain(fields)
+                    .rangeRoundBands([0, width], 0.1);
+
+                // Make y scale of the y-axis go from 0-100
+                var yScale = d3.scale.linear()
+                    .domain([0, 100])
+                    .range([height, 0]);
+
+                // draw the canvas for the svg
+                var canvas = d3.select("#visualisation-container")
+                    .append("svg")
+                        .attr("width",  width  + margin.left + margin.right)
+                        .attr("height", height + margin.top  + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                // x-axis labels 
+                let tickLabels = 
+                ['AR',
+                'ER',
+                'FSR',
+                'CPF',
+                'IFR',
+                'ISR',
+                'IRN',
+                'GER'];
+                // Make the x-axis
+                var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient("bottom")
+                    .tickFormat((d,i) => tickLabels[i]);;
+                      
+                var xAxisHandleForUpdate = canvas.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+                
+                xAxisHandleForUpdate.append("text")
+                    .attr("y", 30)
+                    .attr("x", width/1.7)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Ranking Criteria")
+                    .style("fill", "#");
+
+                // create tooltip when hovering
+                var tooltip = d3.select("body").append("div")   
+                    .attr("id", "myTooltip")    
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("background", "#D3D3D3")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")           
+                    .text("Tooltip");
+
+                // Make y-axis
+                var yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left");
+
+                var yAxisHandleForUpdate = canvas.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+
+                yAxisHandleForUpdate.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -40)
+                    .attr("x", -120)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Score out out of 100");
+
+                // update the bars on the chart 
+                var updateBars = function(data) {
+                    yAxisHandleForUpdate.call(yAxis);
+
+                    var bars = canvas.selectAll(".bar").data(data);
+
+                    // add new bars for any new data
+                    bars.enter()
+                        .append("rect")
+                            .attr("class", "bar")
+                            .attr("x", function(d,i) { return xScale( fields[i] ); })
+                            .attr("width", xScale.rangeBand())
+                            .attr("y", function(d,i) { return yScale(d); })
+                            .attr("height", function(d,i) { return height - yScale(d); })
+                            .on("mouseover", function(d) {
+                                // edit d.name to include other info to be displayed too
+                                tooltip.html(d); 
+                                return tooltip.style("visibility", "visible");
+                            })
+                            .on("mousemove", function() {
+                                return tooltip.style("top", (d3.event.pageY-10) +"px")
+                                .style("left", (d3.event.pageX+10) +"px");
+                            })               
+                            .on("mouseout", function() {
+                                return tooltip.style("visibility", "hidden");
+                            });
+    
+
+                    // Update the old bars height
+                    bars
+                        .transition().duration(250)
+                        .attr("y", function(d,i) { return yScale(d); })
+                        .attr("height", function(d,i) { return height - yScale(d); });
+
+                    // Remove old ones
+                    bars.exit().remove();
+                };
+
+                // Handler for dropdown value change
+                var dropdownChange = function() {
+                    var newUniSelected = d3.select(this).property('value'), newData = universityMap[newUniSelected];
+                    updateBars(newData);
+                };
+
+                // Get the list of university names for the dropdown
+                var uniNames = Object.keys(universityMap);
+
+                var dropdown = d3.select("#dropdown")
+                    .insert("select", "svg")
+                    .on("change", dropdownChange);
+
+                dropdown.selectAll("option")
+                    .data(uniNames)
+                    .enter().append("option")
+                        .attr("value", function (d) { return d; })
+                        .text(function (d) {
+                            // return the name of the university
+                            return d; 
+                        });
+
+                var initialData = universityMap[uniNames[0]];
+                updateBars(initialData);
+            };
+        </script>
+    </body>
+</html>
