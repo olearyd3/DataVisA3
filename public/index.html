@@ -12,7 +12,7 @@
         <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     </head>
     <body>
-        <h1>Data Visualisation of the QS World University Rankings 2023</h1>
+        <h1>Data Visualisation of the QS Top 1000 World University Rankings 2023</h1>
         <div id='dropdown'></div>
         <div class = "flexdiv">
             <div id='visualisation-container'></div>
@@ -60,10 +60,10 @@
                     });
                 });
                 console.log(universityMap);
-                makeVis(universityMap);
+                makeBarChart(universityMap);
             });
 
-            var makeVis = function(universityMap) {
+            var makeBarChart = function(universityMap) {
                 // Define dimensions of vis
                 var margin = { top: 50, right: 50, bottom: 50, left: 50 },
                     width  = 700 - margin.left - margin.right,
@@ -110,11 +110,11 @@
                 
                 xAxisHandleForUpdate.append("text")
                     .attr("y", 30)
-                    .attr("x", width/1.7)
+                    .attr("x", 320)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Ranking Criteria")
-                    .style("fill", "#");
+                    .style("fill", "#000");
 
                 // create tooltip when hovering
                 var tooltip = d3.select("body").append("div")   
@@ -129,8 +129,7 @@
 
                 // Make y-axis
                 var yAxis = d3.axisLeft()
-                    .scale(yScale)
-;
+                    .scale(yScale);
 
                 var yAxisHandleForUpdate = canvas.append("g")
                     .attr("class", "y axis")
@@ -142,7 +141,8 @@
                     .attr("x", -120)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
-                    .text("Score out out of 100");
+                    .text("Score out out of 100")
+                    .style("fill", "#000");
 
                 // update the bars on the chart 
                 var updateBars = function(data) {
@@ -154,10 +154,16 @@
                     bars.enter()
                         .append("rect")
                             .attr("class", "bar")
-                            .attr("x", function(d,i) { return xScale( fields[i] ); })
+                            .attr("x", function(d,i) { 
+                                return xScale(fields[i]); 
+                            })
                             .attr("width", xScale.bandwidth())
-                            .attr("y", function(d,i) { return yScale(d); })
-                            .attr("height", function(d,i) { return height - yScale(d); })
+                            .attr("y", function(d,i) { 
+                                return yScale(d); 
+                            })
+                            .attr("height", function(d,i) {
+                                return height - yScale(d); 
+                            })
                             .on("mouseover", function(d) {
                                 tooltip.html(d); 
                                 return tooltip.style("visibility", "visible");
@@ -214,31 +220,47 @@
                 path = d3.geoPath(),
                 data = d3.map(),
                 worldmap = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
-                worldpopulation = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv";
+                worldpopulation = "universityRankings.csv";
 
             let centered, world;
-
             var fileName = "universityRankings.csv";
-            var uniNames;
+            var uniNames = [];
+            var uniRank = ["Rank"];
+            var i = 0;
             d3.csv(fileName, function(error, data) {
-                var universityMap = {};
+                var countCountry = {};
                 data.forEach(function(d) {
-                    var university = d.location;
-                   // console.log(university);
-                    universityMap[university] = [];
-                    fields.forEach(function(field) {
-                        universityMap[university].push( +d[field] );
-                    });
+                    var country = d.location;
+                    if(countCountry[country] == undefined) {
+                        countCountry[country] = 1;
+                        i++;
+                    }
+                    else {
+                        countCountry[country] = countCountry[country]+1;
+                    }
+                    uniNames[country] = countCountry[country];
                 });
-                uniNames = Object.keys(universityMap);
+                data.forEach(function(d) {
+                    var country = d.location;
+                    d.count = countCountry[country];
+                   // console.log(country, d.count);
+                   // uniNames[i] = countCountry[country];
+                });
                 console.log(uniNames);
                 //numUniversitiesPerCountry(uniNames);
             });
 
             function numUniversitiesPerCountry(d) {
                 for(let i = 0; i < Object.keys(uniNames).length; i++) {
-                    if(uniNames[i] == d.properties.name) {
-                        console.log("uniNames log: ", uniNames[i]);
+                    //console.log(Object.keys(uniNames)[i]);
+                    if("England" == d.properties.name) {
+                        return uniNames["United Kingdom"];
+                    }
+                    else if(!uniNames[d.properties.name]) {
+                        return 0;
+                    }
+                    else {
+                        return uniNames[d.properties.name];
                     }
                 }
             }
@@ -249,8 +271,8 @@
 
             // Define color scale
             const colorScale = d3.scaleThreshold()
-                .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
-                .range(d3.schemeOrRd[7]);
+                .domain([0, 5, 10, 20, 50, 100])
+                .range(d3.schemeBlues[7]);
 
             // add tooltip
             const tooltip = d3.select("body").append("div")
@@ -293,9 +315,9 @@
                         .style("top", (d3.event.pageY - 28) + "px")
                         .transition().duration(400)
                         .style("opacity", 1)
-                        .text(d.properties.name + ': ' + Math.round((d.total / 1000000) * 10) / 10 + ' mio.');
+                        .text(d.properties.name + ': ' + numUniversitiesPerCountry(d) + ' universities in the Top 1000');
                     displayNumUniversities(d)
-                    numUniversitiesPerCountry(d);
+                   // numUniversitiesPerCountry(d);
                 }
 
                 let mouseLeave = function() {
@@ -326,7 +348,8 @@
 
                     // set the color of each country
                     .attr("fill", function(d) {
-                        d.total = data.get(d.id) || 0;
+                        d.total = numUniversitiesPerCountry(d);
+                        console.log("Total data: ", d.properties.name, ": ", d.total);
                         return colorScale(d.total);
                     })
 
@@ -381,12 +404,13 @@
                         return height - (i * ls_h) - ls_h - 6;
                     })
                     .text(function(d, i) {
-                        if (i === 0) return "< " + d[1] / 1000000 + " m";
-                        if (d[1] < d[0]) return d[0] / 1000000 + " m +";
-                        return d[0] / 1000000 + " m - " + d[1] / 1000000 + " m";
+                        if (i === 0) return "0";
+                        if(i === 1) return (d[0]+1) + " - " + (d[1]-1);
+                        if (d[1] < d[0]) return d[0] + "+";
+                        return d[0] + " - " + (d[1]-1);
                     });
 
-                legend.append("text").attr("x", 15).attr("y", 280).text("Population (Million)");
+                legend.append("text").attr("x", 15).attr("y", 280).text("Number of Top 1000 Universities");
             }
         </script>
     </body>
