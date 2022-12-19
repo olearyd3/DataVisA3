@@ -1,0 +1,132 @@
+h1 {
+    text-align: center;
+    padding-bottom: 10px;
+    font-family: 'Roboto Mono';
+    font-size: 22px;
+}
+
+.headingsDiv {
+    clear:both;
+    padding-bottom: 50px;
+}
+
+body {
+    font: 15px times;
+    background-color: #FDF8F5;
+    font-family: 'Roboto Mono';
+}
+
+.flexdiv {
+    display: flex;
+}
+
+#visualisation-container {
+    flex: 1;
+    padding-left: 100px;
+    /*border-radius: 3px;
+    border-color: #000;
+    border-style: solid;*/
+}
+
+#middle {
+    flex: 3;
+}
+
+
+#worldmap {
+    flex: 1;
+    padding-right: 120px;
+}
+
+#barcharth3 {
+    padding-left: 120px;
+    font-family: 'Roboto Mono';
+    font-size: 15px;
+}
+
+#maph3 {
+    padding-right: 240px;
+    font-family: 'Roboto Mono';
+    font-size: 15px;
+}
+
+#charth3 {
+    text-align: center;
+    font-family: 'Roboto Mono';
+    font-size: 15px;
+}
+
+#dropdown {
+    padding-left: 125px;
+}
+
+#dropdown2 {
+    text-align: center;
+}
+
+#key {
+    padding-left: 245px;
+    font-family: 'Roboto Mono';
+    font-size: 10px;
+}
+
+p {
+    font-size: 12px;
+}
+
+#bottomDiv {
+    text-align: center;
+}
+
+#nextChart {
+    border-radius: 3px;
+    border-color: #000;
+    border-style: solid;
+}
+
+#legend {
+    font: 15px times;
+}
+
+select {
+    text-align: center;
+    min-width: 160px;
+    background-color: #eef1d9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 5px;
+    z-index: 1;
+}
+
+#myTooltip {
+    font-family: 'Roboto Mono';
+    font-size: 15px;
+}
+
+.tooltip {
+    font-family: 'Roboto Mono';
+    font-size: 15px;
+}
+
+p {
+    padding-left: 2%; 
+}
+
+#bottomh3 {
+    text-align: center;
+}
+
+.bar {
+    fill: #a778ad;
+    opacity: 0.9;
+}
+
+.b {
+    fill: rgb(200, 144, 180);
+    opacity: 0.9;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
