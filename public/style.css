@@ -23,15 +23,11 @@ body {
 #visualisation-container {
     flex: 1;
     padding-left: 100px;
-    /*border-radius: 3px;
-    border-color: #000;
-    border-style: solid;*/
 }
 
 #middle {
     flex: 3;
 }
-
 
 #worldmap {
     flex: 1;
