@@ -231,28 +231,28 @@
                                 console.log(pos[0]);
                                 if(pos[0] >= 16 && pos[0] <= 88) {
                                     if(!boolvar) {
-                                        tooltip.html(fullFields[0] + ": " + d + "<br />"
-                                        + fullFieldNames[0] + " Rank: " + initialAR); 
+                                        tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
+                                        + fullFields[0] + " Rank: " + initialAR); 
                                         console.log("TEST: ", initialAR);
                                     }
                                     else {
                                         ARVal = getAR(0, boolvar);
                                         if(isNaN(ARVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[0] + ": " + d + "<br />"
-                                                + fullFieldNames[0] + " Rank: " + initialAR); 
+                                                tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
+                                                + fullFields[0] + " Rank: " + initialAR); 
                                                 console.log("TEST: ", initialAR);
                                             }
                                             // fix this
                                             else {
-                                                tooltip.html(fullFields[0] + ": " + d + "<br />"
-                                                + fullFieldNames[0] + " Rank: " + "500+"); 
+                                                tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
+                                                + fullFields[0] + " Rank: " + "500+"); 
                                                 console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
-                                            tooltip.html(fullFields[0] + ": " + d + "<br />"
-                                            + fullFieldNames[0] + " Rank: " + ARVal); 
+                                            tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
+                                            + fullFields[0] + " Rank: " + ARVal); 
                                             console.log("TEST2: ", ARVal);
                                         }
                                     }
@@ -261,25 +261,25 @@
                                 if(pos[0] >= 101 && pos[0] <= 173) {
                                     if(!boolvarER) {
                                         tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
-                                        + fullFieldNames[1] + " Rank: " + initialER); 
+                                        + fullFields[1] + " Rank: " + initialER); 
                                     }
                                     else {
                                         ERVal = getER(0, boolvarER);
                                         if(isNaN(ERVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[1] + ": " + d + "<br />"
-                                                + fullFieldNames[1] + " Rank: " + initialER); 
+                                                tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
+                                                + fullFields[1] + " Rank: " + initialER); 
                                                 console.log("TEST: ", initialER);
                                             }
                                             else {
-                                                tooltip.html(fullFields[1] + ": " + d + "<br />"
-                                                + fullFieldNames[1] + " Rank: " + "500+"); 
+                                                tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
+                                                + fullFields[1] + " Rank: " + "500+"); 
                                                 console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
-                                            + fullFieldNames[1] + " Rank: " + ERVal); 
+                                            + fullFields[1] + " Rank: " + ERVal); 
                                         }
                                     }
                                     boolvarER = true;
@@ -287,25 +287,25 @@
                                 if(pos[0] >= 186 && pos[0] <= 258) {
                                     if(!boolvarFSR) {
                                         tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
-                                        + fullFieldNames[2] + " Rank: " + initialFSR); 
+                                        + fullFields[2] + " Rank: " + initialFSR); 
                                     }
                                     else {
                                         FSRVal = getFSR(0, boolvarFSR);
                                         if(isNaN(FSRVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[2] + ": " + d + "<br />"
-                                                + fullFieldNames[2] + " Rank: " + initialFSR); 
+                                                tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
+                                                + fullFields[2] + " Rank: " + initialFSR); 
                                                 console.log("TEST: ", initialFSR);
                                             }
                                             else {
-                                                tooltip.html(fullFields[2] + ": " + d + "<br />"
-                                                + fullFieldNames[2] + " Rank: " + "500+"); 
+                                                tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
+                                                + fullFields[2] + " Rank: " + "500+"); 
                                                 console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
-                                            + fullFieldNames[2] + " Rank: " + FSRVal); 
+                                            + fullFields[2] + " Rank: " + FSRVal); 
                                         }
                                     }
                                     boolvarFSR = true;
@@ -313,25 +313,25 @@
                                 if(pos[0] >= 271 && pos[0] <= 343) {
                                     if(!boolvarCPF) {
                                         tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
-                                        + fullFieldNames[3] + " Rank: " + initialCPF); 
+                                        + fullFields[3] + " Rank: " + initialCPF); 
                                     }
                                     else {
                                         CPFVal = getCPF(0, boolvarCPF);
                                         if(isNaN(CPFVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[3] + ": " + d + "<br />"
-                                                + fullFieldNames[3] + " Rank: " + initialCPF); 
+                                                tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
+                                                + fullFields[3] + " Rank: " + initialCPF); 
                                                 console.log("TEST: ", initialCPF);
                                             }
                                             else {
-                                                tooltip.html(fullFields[3] + ": " + d + "<br />"
-                                                + fullFieldNames[3] + " Rank: " + "500+"); 
+                                                tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
+                                                + fullFields[3] + " Rank: " + "500+"); 
                                                 console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
-                                            + fullFieldNames[3] + " Rank: " + CPFVal); 
+                                            + fullFields[3] + " Rank: " + CPFVal); 
                                         }
                                     }
                                     boolvarCPF = true;
@@ -339,25 +339,25 @@
                                 if(pos[0] >= 356 && pos[0] <= 428) {
                                     if(!boolvarIFR) {
                                         tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
-                                        + fullFieldNames[4] + " Rank: " + initialIFR); 
+                                        + fullFields[4] + " Rank: " + initialIFR); 
                                     }
                                     else {
                                         IFRVal = getIFR(0, boolvarIFR);
                                         if(isNaN(IFRVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[4] + ": " + d + "<br />"
-                                                + fullFieldNames[4] + " Rank: " + initialIFR); 
+                                                tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
+                                                + fullFields[4] + " Rank: " + initialIFR); 
                                                 console.log("TEST: ", initialIFR);
                                             }
                                             else {
-                                            tooltip.html(fullFields[4] + ": " + d + "<br />"
-                                            + fullFieldNames[4] + " Rank: " + "500+"); 
-                                            console.log("TEST1: ", "500+");
+                                                tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
+                                                + fullFields[4] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
-                                            + fullFieldNames[4] + " Rank: " + IFRVal); 
+                                            + fullFields[4] + " Rank: " + IFRVal); 
                                         }
                                     }
                                     boolvarIFR = true;
@@ -365,25 +365,25 @@
                                 if(pos[0] >= 441 && pos[0] <= 513) {
                                     if(!boolvarISR) {
                                         tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
-                                        + fullFieldNames[5] + " Rank: " + initialISR); 
+                                        + fullFields[5] + " Rank: " + initialISR); 
                                     }
                                     else {
                                         ISRVal = getISR(0, boolvarISR);
                                         if(isNaN(ISRVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 90) {
-                                                tooltip.html(fullFields[5] + ": " + d + "<br />"
-                                                + fullFieldNames[5] + " Rank: " + initialISR); 
+                                                tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
+                                                + fullFields[5] + " Rank: " + initialISR); 
                                                 console.log("TEST: ", initialISR);
                                             }
                                             else {
-                                            tooltip.html(fullFields[5] + ": " + d + "<br />"
-                                            + fullFieldNames[5] + " Rank: " + "500+"); 
-                                            console.log("TEST1: ", "500+");
+                                                tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
+                                                + fullFields[5] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
-                                            + fullFieldNames[5] + " Rank: " + ISRVal); 
+                                            + fullFields[5] + " Rank: " + ISRVal); 
                                         }
                                     }
                                     boolvarISR = true;
@@ -391,25 +391,25 @@
                                 if(pos[0] >= 526 && pos[0] <= 598) {
                                     if(!boolvarIRN) {
                                         tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
-                                        + fullFieldNames[6] + " Rank: " + initialIRN); 
+                                        + fullFields[6] + " Rank: " + initialIRN); 
                                     }
                                     else {
                                         IRNVal = getIRN(0, boolvarIRN);
                                         if(isNaN(IRNVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 96.1) {
-                                                tooltip.html(fullFields[6] + ": " + d + "<br />"
-                                                + fullFieldNames[6] + " Rank: " + initialIRN); 
+                                                tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
+                                                + fullFields[6] + " Rank: " + initialIRN); 
                                                 console.log("TEST: ", initialIRN);
                                             }
                                             else {
-                                            tooltip.html(fullFields[6] + ": " + d + "<br />"
-                                            + fullFieldNames[6] + " Rank: " + "500+"); 
-                                            console.log("TEST1: ", "500+");
+                                                tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
+                                                + fullFields[6] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
-                                            + fullFieldNames[6] + " Rank: " + IRNVal); 
+                                            + fullFields[6] + " Rank: " + IRNVal); 
                                         }
                                     }
                                     boolvarIRN = true;
@@ -417,25 +417,25 @@
                                 if(pos[0] >= 611 && pos[0] <= 683) {
                                     if(!boolvarGER) {
                                         tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
-                                        + fullFieldNames[7] + " Rank: " + initialGER); 
+                                        + fullFields[7] + " Rank: " + initialGER); 
                                     }
                                     else {
                                         GERVal = getGER(0, boolvarGER);
                                         if(isNaN(GERVal)) {
                                             if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
-                                                tooltip.html(fullFields[7] + ": " + d + "<br />"
-                                                + fullFieldNames[7] + " Rank: " + initialGER); 
+                                                tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
+                                                + fullFields[7] + " Rank: " + initialGER); 
                                                 console.log("TEST: ", initialGER);
                                             }
                                             else {
-                                            tooltip.html(fullFields[7] + ": " + d + "<br />"
-                                            + fullFieldNames[7] + " Rank: " + "500+"); 
-                                            console.log("TEST1: ", "500+");
+                                                tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
+                                                + fullFields[7] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
                                             }
                                         }
                                         else {
                                             tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
-                                            + fullFieldNames[7] + " Rank: " + GERVal); 
+                                            + fullFields[7] + " Rank: " + GERVal); 
                                         }
                                     }
                                     boolvarGER = true;
