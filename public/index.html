@@ -6,6 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>CSU44056 Assignment 3</title>
         <link rel="stylesheet" href="style.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
         <!-- USE D3 for the visualisation -->
         <script src="http://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -13,9 +14,13 @@
     </head>
     <body>
         <h1>Data Visualisation of the QS Top 1000 World University Rankings 2023</h1>
-        <h3 id="barcharth3">Bar Chart of the Scores out of 100 across each Ranking Criteria for each University</h3>
+        <div class="headingsDiv">
+            <h3 id="barcharth3" style="float: left">Bar Chart of the Scores out of 100 across each Ranking Criteria for each University</h3>
+            <h3 id="maph3" style="float: right">Choropleth Map based on Number of Top 1000 Universities per Country</h3>
+        </div>
         <div class = "flexdiv">
             <div id='visualisation-container'>
+                
                 <div id='dropdown'></div>
             </div>
             <div id="middle">
@@ -24,25 +29,14 @@
                 <svg id="mapsvg" width="800" height="450"></svg>
             </div>
         </div>
-        <div id="key">
-            <p>KEY:
-                AR = Academic Reputation, 
-                ER = Employer Reputation, 
-                FSR = Faculty Student Ratio, 
-                CPF = Citations per Faculty, <br />
-                IFR = International Faculty Ratio, 
-                ISR = International Students Ratio, 
-                IRN = International Research Network, 
-                GER = Employment Outcomes <br />
-            </p>
-        </div>
-        <h3 id="barcharth3">Bar Chart of the Scores out of 100 across each Ranking Criteria for each University</h3>
+        <h3 id="charth3">Chart of the Top 50 Universities by Total Score</h3>
         <div id="bottomDiv">
-            
-            <div id='dropdown2'></div>
           <!-- <svg id="nextChart" width=95% height="250">
             </svg>--> 
         </div>
+        <p style="text-align: center">Hover over any of the components of the visualisation for more information! The dataset used for this visualisation can be found 
+            <a href="https://www.kaggle.com/datasets/jkanthony/world-university-rankings-202223">here</a>.
+        </p>
         <script>
 /* BAR CHART 1 STARTS HERE!!!!!!!!!!!!!!!!!!!!!!*/
             // load the CSV
@@ -238,7 +232,7 @@
                                     else {
                                         ARVal = getAR(0, boolvar);
                                         if(isNaN(ARVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
                                                 + fullFields[0] + " Rank: " + initialAR); 
                                                 console.log("TEST: ", initialAR);
@@ -266,7 +260,7 @@
                                     else {
                                         ERVal = getER(0, boolvarER);
                                         if(isNaN(ERVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
                                                 + fullFields[1] + " Rank: " + initialER); 
                                                 console.log("TEST: ", initialER);
@@ -292,7 +286,7 @@
                                     else {
                                         FSRVal = getFSR(0, boolvarFSR);
                                         if(isNaN(FSRVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
                                                 + fullFields[2] + " Rank: " + initialFSR); 
                                                 console.log("TEST: ", initialFSR);
@@ -318,7 +312,7 @@
                                     else {
                                         CPFVal = getCPF(0, boolvarCPF);
                                         if(isNaN(CPFVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
                                                 + fullFields[3] + " Rank: " + initialCPF); 
                                                 console.log("TEST: ", initialCPF);
@@ -344,7 +338,7 @@
                                     else {
                                         IFRVal = getIFR(0, boolvarIFR);
                                         if(isNaN(IFRVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
                                                 + fullFields[4] + " Rank: " + initialIFR); 
                                                 console.log("TEST: ", initialIFR);
@@ -370,7 +364,7 @@
                                     else {
                                         ISRVal = getISR(0, boolvarISR);
                                         if(isNaN(ISRVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 90) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 90) {
                                                 tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
                                                 + fullFields[5] + " Rank: " + initialISR); 
                                                 console.log("TEST: ", initialISR);
@@ -396,7 +390,7 @@
                                     else {
                                         IRNVal = getIRN(0, boolvarIRN);
                                         if(isNaN(IRNVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 96.1) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 96.1) {
                                                 tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
                                                 + fullFields[6] + " Rank: " + initialIRN); 
                                                 console.log("TEST: ", initialIRN);
@@ -422,7 +416,7 @@
                                     else {
                                         GERVal = getGER(0, boolvarGER);
                                         if(isNaN(GERVal)) {
-                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT)" && d == 100) {
                                                 tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
                                                 + fullFields[7] + " Rank: " + initialGER); 
                                                 console.log("TEST: ", initialGER);
@@ -656,7 +650,7 @@
 
             // Define color scale
             const colorScale = d3.scaleThreshold()
-                .domain([0, 5, 10, 20, 50, 100])
+                .domain([1, 5, 10, 20, 50, 100])
                 .range(d3.schemeBlues[7]);
 
             // add tooltip
@@ -742,7 +736,7 @@
             
                 // Creating the legend at the side of the map
                 const x = d3.scaleLinear()
-                    .domain([2.6, 75.1])
+                    .domain([0, 100])
                     .rangeRound([600, 860]);
 
                 const legend = svg.append("g")
@@ -780,8 +774,8 @@
                     })
                     .text(function(d, i) {
                         if (i === 0) return "0";
-                        if(i === 1) return (d[0]+1) + " - " + (d[1]-1);
-                        if (d[1] < d[0]) return d[0] + "+";
+                        if(i === 1) return (d[0]) + " - " + (d[1]-1);
+                        if (d[1] <= d[0]) return d[0] + "+";
                         return d[0] + " - " + (d[1]-1);
                     });
 
@@ -794,40 +788,61 @@
             // load the CSV as before
             var fileName = "universityRankings.csv";
             // array of the values for the barchart
-            var fields = ["ar score",
-            "er score",
-            "fsr score",
-            "cpf score",
-            "ifr score",
-            "isr score",
-            "irn score",
-            "ger score"];
+            var top50 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
+            var uniRanks = {};
+            var totalRank = ["score_scaled"]
+            var integer = 0;
+            var top50Totals = [];
+            var universityNames = [];
             d3.csv(fileName, function(error, data) {
                 var universityMap = {};
                 data.forEach(function(d) {
                     var university = d.institution;
                    // console.log(university);
                     universityMap[university] = [];
-
+                    uniRanks[university] = [];
                     fields.forEach(function(field) {
                         universityMap[university].push( +d[field] );
                     });
+                    totalRank.forEach(function(f) {
+                        uniRanks[university].push( +d[f] );
+                    })
+                    if(integer < 50) {
+                        top50Totals.push(uniRanks[university]);
+                        universityNames[integer] = university;
+                        integer++;
+                    }
                 });
                 console.log(universityMap);
+                console.log(uniRanks);
                 makeBC(universityMap);
+                console.log(universityNames);
+                console.log(top50Totals);
+                //var first = universityMap[uniNames[0]];
+                //updateBars(first);
             });
+
+            var tool = d3.select("body").append("div")   
+                    .attr("id", "ToolTip")    
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("background", "#D3D3D3")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")           
+                    .text("ToolTip");
 
             var makeBC = function(universityMap) {
                 // Define dimensions of vis
-                var margin = { top: 20, right: 50, bottom: 50, left: 50 },
+                var margin = { top: 20, right: 50, bottom: 50, left: 30 },
                     width  = 1500 - margin.left - margin.right,
                     height = 200 - margin.top  - margin.bottom;
                     
                 // Make x scale
                 var xScale = d3.scaleBand()
-                    .domain(fields)
+                    .domain(top50)
                     .rangeRound([0, width])
-                    .padding(0.15);
+                    .padding(0.2);
 
                 // Make y scale of the y-axis go from 0-100
                 var yScale = d3.scaleLinear()
@@ -855,7 +870,7 @@
                 // Make the x-axis
                 var xAxis = d3.axisBottom()
                     .scale(xScale)
-                    .tickFormat((d,i) => tickLabels[i]);;
+                    .tickFormat((d,i) => top50[i]);;
                       
                 var xAxisHandleForUpdate = canvas.append("g")
                     .attr("class", "x axis")
@@ -888,17 +903,16 @@
                     .style("fill", "#000");
 
                 // update the bars on the chart 
+                // add new bars for any new data
                 var updateBars = function(data) {
                     yAxisHandleForUpdate.call(yAxis);
-
-                    var bars = canvas.selectAll(".b").data(data);
-
-                    // add new bars for any new data
-                    bars.enter()
+                  //  var uniName = universitySelected;
+                    var b = canvas.selectAll(".b").data(data);
+                    b.enter()
                         .append("rect")
                             .attr("class", "b")
-                            .attr("x", function(d,i) { 
-                                return xScale(fields[i]); 
+                            .attr("x", function(d,i) {
+                                return xScale(top50[i]); 
                             })
                             .attr("width", xScale.bandwidth())
                             .attr("y", function(d,i) { 
@@ -906,43 +920,27 @@
                             })
                             .attr("height", function(d,i) {
                                 return height - yScale(d); 
+                            })
+                            .on("mouseover", function(d, i) {
+                                tool.html(universityNames[i] + ": " + d); 
+                                return tool.style("visibility", "visible");
+                            })
+                            .on("mousemove", function() {
+                                return tool.style("top", (d3.event.pageY-10) +"px")
+                                .style("left", (d3.event.pageX+10) +"px");
+                            })               
+                            .on("mouseout", function() {
+                                return tool.style("visibility", "hidden");
                             });
-    
-
-                    // Update the old bars height
-                    bars
-                        .transition().duration(250)
-                        .attr("y", function(d,i) { return yScale(d); })
-                        .attr("height", function(d,i) { return height - yScale(d); });
-
-                    // Remove old ones
-                    bars.exit().remove();
-                };
-
-                // Handler for dropdown value change
-                var dropdownChange = function() {
-                    var newUniSelected = d3.select(this).property('value'), newData = universityMap[newUniSelected];
-                    updateBars(newData);
-                };
-
-                // Get the list of university names for the dropdown
-                var uniNames = Object.keys(universityMap);
-
-                var dropdown = d3.select("#dropdown2")
-                    .insert("select", "svg")
-                    .on("change", dropdownChange);
-
-                dropdown.selectAll("option")
-                    .data(uniNames)
-                    .enter().append("option").sort()
-                        .attr("value", function (d) { return d; })
-                        .text(function (d) {
-                            // return the name of the university
-                            return d; 
-                        });
-
-                var first = universityMap[uniNames[0]];
-                updateBars(first);
+                }
+                console.log("LIST OF TOP 50", top50Totals);
+                var newArr = [];
+                var i = 0;
+                for (i in top50Totals) {
+                    newArr[i] = i[0]
+                }
+                console.log(newArr);
+                updateBars(top50Totals);
             };
         </script>
         <!-- DARK MODE FOR COLOUR OPTIONS -->
