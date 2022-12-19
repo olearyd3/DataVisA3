@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Data Visualisation of the QS Top 1000 World University Rankings 2023</h1>
-        
+        <h3 id="barcharth3">Bar Chart of the Scores out of 100 across each Ranking Criteria for each University</h3>
         <div class = "flexdiv">
             <div id='visualisation-container'>
                 <div id='dropdown'></div>
@@ -36,7 +36,9 @@
                 GER = Employment Outcomes <br />
             </p>
         </div>
-        <div class="bottomDiv">
+        <div id="bottomDiv">
+            
+            <div id='dropdown2'></div>
           <!-- <svg id="nextChart" width=95% height="250">
             </svg>--> 
         </div>
@@ -174,7 +176,7 @@
                             })
                             .on("mouseover", function(d) {
                                 let pos = d3.mouse(this);
-                                //console.log(pos[0]);
+                                console.log(pos[0]);
                                 if(pos[0] >= 13 && pos[0] <= 74) {
                                     tooltip.html(fullFieldNames[0] + ": " + d); 
                                 }
@@ -196,7 +198,7 @@
                                 if(pos[0] >= 451 && pos[0] <= 513) {
                                     tooltip.html(fullFieldNames[6] + ": " + d); 
                                 }
-                                if(pos[0] >= 525 && pos[0] <= 586) {
+                                if(pos[0] >= 524 && pos[0] <= 586) {
                                     tooltip.html(fullFieldNames[7] + ": " + d); 
                                 }
                                 return tooltip.style("visibility", "visible");
@@ -436,7 +438,167 @@
                 legend.append("text").attr("x", 15).attr("y", 280).text("Number of Top 1000 Universities");
             }
         </script>
-        <h3> NEXT BAR CHART WILL GO HERE </h3>
+
+        <!-- TO BE CHANGED-->
+        <script>
+              // load the CSV
+            var fileName = "universityRankings.csv";
+            // array of the values for the barchart
+            var fields = ["ar score",
+            "er score",
+            "fsr score",
+            "cpf score",
+            "ifr score",
+            "isr score",
+            "irn score",
+            "ger score"];
+            var fullFieldNames = 
+            ["Academic Reputation", "Employer Reputation", "Faculty Student Ratio",
+            "Citations per Faculty", "International Faculty Ratio", "International Students Ratio",
+            "International Research Network", "Employment Outcomes"];
+            d3.csv(fileName, function(error, data) {
+                var universityMap = {};
+                data.forEach(function(d) {
+                    var university = d.institution;
+                   // console.log(university);
+                    universityMap[university] = [];
+
+                    fields.forEach(function(field) {
+                        universityMap[university].push( +d[field] );
+                    });
+                });
+                console.log(universityMap);
+                makeBC(universityMap);
+            });
+
+            var makeBC = function(universityMap) {
+                // Define dimensions of vis
+                var margin = { top: 20, right: 50, bottom: 50, left: 50 },
+                    width  = 1500 - margin.left - margin.right,
+                    height = 200 - margin.top  - margin.bottom;
+                    
+                // Make x scale
+                var xScale = d3.scaleBand()
+                    .domain(fields)
+                    .rangeRound([0, width])
+                    .padding(0.15);
+
+                // Make y scale of the y-axis go from 0-100
+                var yScale = d3.scaleLinear()
+                    .domain([0, 100])
+                    .range([height, 0]);
+
+                // draw the canvas for the svg
+                var canvas = d3.select("#bottomDiv")
+                    .append("svg")
+                        .attr("width",  width  + margin.left + margin.right)
+                        .attr("height", height + margin.top  + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+                // x-axis labels 
+                let tickLabels = 
+                ['AR',
+                'ER',
+                'FSR',
+                'CPF',
+                'IFR',
+                'ISR',
+                'IRN',
+                'GER'];
+                // Make the x-axis
+                var xAxis = d3.axisBottom()
+                    .scale(xScale)
+                    .tickFormat((d,i) => tickLabels[i]);;
+                      
+                var xAxisHandleForUpdate = canvas.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+                
+                xAxisHandleForUpdate.append("text")
+                    .attr("y", 30)
+                    .attr("x", 320)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Ranking Criteria")
+                    .style("fill", "#000");
+
+                // Make y-axis
+                var yAxis = d3.axisLeft()
+                    .scale(yScale);
+
+                var yAxisHandleForUpdate = canvas.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+
+                yAxisHandleForUpdate.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -40)
+                    .attr("x", -120)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Score out out of 100")
+                    .style("fill", "#000");
+
+                // update the bars on the chart 
+                var updateBars = function(data) {
+                    yAxisHandleForUpdate.call(yAxis);
+
+                    var bars = canvas.selectAll(".bar").data(data);
+
+                    // add new bars for any new data
+                    bars.enter()
+                        .append("rect")
+                            .attr("class", "bar")
+                            .attr("x", function(d,i) { 
+                                return xScale(fields[i]); 
+                            })
+                            .attr("width", xScale.bandwidth())
+                            .attr("y", function(d,i) { 
+                                return yScale(d); 
+                            })
+                            .attr("height", function(d,i) {
+                                return height - yScale(d); 
+                            });
+    
+
+                    // Update the old bars height
+                    bars
+                        .transition().duration(250)
+                        .attr("y", function(d,i) { return yScale(d); })
+                        .attr("height", function(d,i) { return height - yScale(d); });
+
+                    // Remove old ones
+                    bars.exit().remove();
+                };
+
+                // Handler for dropdown value change
+                var dropdownChange = function() {
+                    var newUniSelected = d3.select(this).property('value'), newData = universityMap[newUniSelected];
+                    updateBars(newData);
+                };
+
+                // Get the list of university names for the dropdown
+                var uniNames = Object.keys(universityMap);
+
+                var dropdown = d3.select("#dropdown2")
+                    .insert("select", "svg")
+                    .on("change", dropdownChange);
+
+                dropdown.selectAll("option")
+                    .data(uniNames)
+                    .enter().append("option")
+                        .attr("value", function (d) { return d; })
+                        .text(function (d) {
+                            // return the name of the university
+                            return d; 
+                        });
+
+                var initialData = universityMap[uniNames[0]];
+                updateBars(initialData);
+            };
+        </script>
         <!-- DARK MODE FOR COLOUR OPTIONS -->
            <!-- <h3 id="DarkModetext">Toggle for Dark and Light Modes</h3>
             <button onclick="darkMode()">Dark Mode</button>

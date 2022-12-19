@@ -31,13 +31,16 @@ body {
 }
 
 #barcharth3 {
-    padding-left: 110px;
+    padding-left: 80px;
 }
 
 #dropdown {
     padding-left: 75px;
 }
 
+#dropdown2 {
+    text-align: center;
+}
 #key {
     padding-left: 50px;
     padding-bottom: 15px;
