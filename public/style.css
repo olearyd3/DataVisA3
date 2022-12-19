@@ -14,7 +14,7 @@ body {
 
 #visualisation-container {
     flex: 1;
-    padding-left: 50px;
+    padding-left: 100px;
     /*border-radius: 3px;
     border-color: #000;
     border-style: solid;*/
@@ -27,22 +27,23 @@ body {
 
 #worldmap {
     flex: 1;
-    padding-right: 70px;
+    padding-right: 120px;
 }
 
 #barcharth3 {
-    padding-left: 80px;
+    padding-left: 170px;
 }
 
 #dropdown {
-    padding-left: 75px;
+    padding-left: 125px;
 }
 
 #dropdown2 {
     text-align: center;
 }
+
 #key {
-    padding-left: 50px;
+    padding-left: 120px;
     padding-bottom: 15px;
 }
 
@@ -50,8 +51,8 @@ p {
     font-size: 12px;
 }
 
-.bottomDiv {
-    padding-left: 75px;
+#bottomDiv {
+    text-align: center;
 }
 
 #nextChart {
@@ -85,6 +86,10 @@ p {
 
 .bar {
     fill: #a778ad;
+    opacity: 0.9;
+}
+.b {
+    fill: rgb(200, 144, 180);
     opacity: 0.9;
 }
 

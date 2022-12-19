@@ -76,7 +76,7 @@
             var makeBarChart = function(universityMap) {
                 // Define dimensions of vis
                 var margin = { top: 20, right: 50, bottom: 50, left: 50 },
-                    width  = 700 - margin.left - margin.right,
+                    width  = 800 - margin.left - margin.right,
                     height = 450 - margin.top  - margin.bottom;
                     
                 // Make x scale
@@ -120,7 +120,7 @@
                 
                 xAxisHandleForUpdate.append("text")
                     .attr("y", 30)
-                    .attr("x", 320)
+                    .attr("x", 390)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Ranking Criteria")
@@ -148,7 +148,7 @@
                 yAxisHandleForUpdate.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", -40)
-                    .attr("x", -120)
+                    .attr("x", -130)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Score out out of 100")
@@ -228,6 +228,16 @@
                     updateBars(newData);
                 };
 
+                // function to sort the dropdown alphabetically
+                function sort() {    
+                    stats.sort();
+                    
+                    d3.select("#order")
+                        .selectAll("div")
+                        .data(stats, (d) => d)
+                        .order();
+                }
+
                 // Get the list of university names for the dropdown
                 var uniNames = Object.keys(universityMap);
 
@@ -237,7 +247,7 @@
 
                 dropdown.selectAll("option")
                     .data(uniNames)
-                    .enter().append("option")
+                    .enter().append("option").sort()
                         .attr("value", function (d) { return d; })
                         .text(function (d) {
                             // return the name of the university
@@ -390,7 +400,7 @@
                         return ToolTip.style("visibility", "hidden");
                     });
             
-                // Legend
+                // Creating the legend at the side of the map
                 const x = d3.scaleLinear()
                     .domain([2.6, 75.1])
                     .rangeRound([600, 860]);
@@ -545,12 +555,12 @@
                 var updateBars = function(data) {
                     yAxisHandleForUpdate.call(yAxis);
 
-                    var bars = canvas.selectAll(".bar").data(data);
+                    var bars = canvas.selectAll(".b").data(data);
 
                     // add new bars for any new data
                     bars.enter()
                         .append("rect")
-                            .attr("class", "bar")
+                            .attr("class", "b")
                             .attr("x", function(d,i) { 
                                 return xScale(fields[i]); 
                             })
@@ -588,15 +598,15 @@
 
                 dropdown.selectAll("option")
                     .data(uniNames)
-                    .enter().append("option")
+                    .enter().append("option").sort()
                         .attr("value", function (d) { return d; })
                         .text(function (d) {
                             // return the name of the university
                             return d; 
                         });
 
-                var initialData = universityMap[uniNames[0]];
-                updateBars(initialData);
+                var first = universityMap[uniNames[0]];
+                updateBars(first);
             };
         </script>
         <!-- DARK MODE FOR COLOUR OPTIONS -->
