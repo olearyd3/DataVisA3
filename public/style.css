@@ -84,6 +84,10 @@ p {
     padding-left: 2%; 
 }
 
+#bottomh3 {
+    text-align: center;
+}
+
 .bar {
     fill: #a778ad;
     opacity: 0.9;

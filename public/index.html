@@ -36,6 +36,7 @@
                 GER = Employment Outcomes <br />
             </p>
         </div>
+        <h3 id="barcharth3">Bar Chart of the Scores out of 100 across each Ranking Criteria for each University</h3>
         <div id="bottomDiv">
             
             <div id='dropdown2'></div>
@@ -43,6 +44,7 @@
             </svg>--> 
         </div>
         <script>
+/* BAR CHART 1 STARTS HERE!!!!!!!!!!!!!!!!!!!!!!*/
             // load the CSV
             var fileName = "universityRankings.csv";
             // array of the values for the barchart
@@ -54,22 +56,45 @@
             "isr score",
             "irn score",
             "ger score"];
-            var fullFieldNames = 
+
+            var fieldRanks = ["Rank",
+            "ar_rank",
+            "er_rank",
+            "fsr_rank",
+            "cpf_rank",
+            "ifr_rank",
+            "isr_rank",
+            "irn_rank",
+            "ger_rank",
+            "score_scaled"];
+
+            var fullFields = 
             ["Academic Reputation", "Employer Reputation", "Faculty Student Ratio",
             "Citations per Faculty", "International Faculty Ratio", "International Students Ratio",
             "International Research Network", "Employment Outcomes"];
+
+            var fullFieldNames = 
+            ["Academic Reputation Score", "Employer Reputation Score", "Faculty Student Ratio Score",
+            "Citations per Faculty Score", "International Faculty Ratio Score", "International Students Ratio Score",
+            "International Research Network Score", "Employment Outcomes Score"];
+
+            var categoryRanks = {};
             d3.csv(fileName, function(error, data) {
                 var universityMap = {};
                 data.forEach(function(d) {
                     var university = d.institution;
                    // console.log(university);
                     universityMap[university] = [];
-
+                    categoryRanks[university] = [];
                     fields.forEach(function(field) {
                         universityMap[university].push( +d[field] );
                     });
+                    fieldRanks.forEach(function(f) {
+                        categoryRanks[university].push( +d[f] );
+                    });
                 });
                 console.log(universityMap);
+                console.log(categoryRanks);
                 makeBarChart(universityMap);
             });
 
@@ -154,17 +179,44 @@
                     .text("Score out out of 100")
                     .style("fill", "#000");
 
+                var initialAR = 5;
+                var initialER = 4;
+                var initialFSR = 14;
+                var initialCPF = 5;
+                var initialIFR = 54;
+                var initialISR = 109;
+                var initialIRN = 58;
+                var initialGER = 3;
+                var boolvar = false;
+                var boolvarER = false;
+                var boolvarFSR = false;
+                var boolvarCPF = false;
+                var boolvarIFR = false;
+                var boolvarISR = false;
+                var boolvarIRN = false;
+                var boolvarGER = false;
                 // update the bars on the chart 
-                var updateBars = function(data) {
+                var updateBars = function(data, selectedUni) {
                     yAxisHandleForUpdate.call(yAxis);
-
+                  //  var uniName = universitySelected;
                     var bars = canvas.selectAll(".bar").data(data);
-
+                    console.log(selectedUni,":", categoryRanks[selectedUni]);
+                    var totalRank = categoryRanks[selectedUni][0];
+                    var arRank = categoryRanks[selectedUni][1];
+                    var erRank = categoryRanks[selectedUni][2];
+                    var fsrRank = categoryRanks[selectedUni][3];
+                    var cpfRank = categoryRanks[selectedUni][4];
+                    var ifrRank = categoryRanks[selectedUni][5];
+                    var isrRank = categoryRanks[selectedUni][6];
+                    var irnRank = categoryRanks[selectedUni][7];
+                    var gerRank = categoryRanks[selectedUni][8];
+                    var totalScore = categoryRanks[selectedUni][9];
+                    console.log("AR RANK", arRank);
                     // add new bars for any new data
                     bars.enter()
                         .append("rect")
                             .attr("class", "bar")
-                            .attr("x", function(d,i) { 
+                            .attr("x", function(d,i) {
                                 return xScale(fields[i]); 
                             })
                             .attr("width", xScale.bandwidth())
@@ -177,29 +229,216 @@
                             .on("mouseover", function(d) {
                                 let pos = d3.mouse(this);
                                 console.log(pos[0]);
-                                if(pos[0] >= 13 && pos[0] <= 74) {
-                                    tooltip.html(fullFieldNames[0] + ": " + d); 
+                                if(pos[0] >= 16 && pos[0] <= 88) {
+                                    if(!boolvar) {
+                                        tooltip.html(fullFields[0] + ": " + d + "<br />"
+                                        + fullFieldNames[0] + " Rank: " + initialAR); 
+                                        console.log("TEST: ", initialAR);
+                                    }
+                                    else {
+                                        ARVal = getAR(0, boolvar);
+                                        if(isNaN(ARVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[0] + ": " + d + "<br />"
+                                                + fullFieldNames[0] + " Rank: " + initialAR); 
+                                                console.log("TEST: ", initialAR);
+                                            }
+                                            // fix this
+                                            else {
+                                                tooltip.html(fullFields[0] + ": " + d + "<br />"
+                                                + fullFieldNames[0] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFields[0] + ": " + d + "<br />"
+                                            + fullFieldNames[0] + " Rank: " + ARVal); 
+                                            console.log("TEST2: ", ARVal);
+                                        }
+                                    }
+                                    boolvar = true;
                                 }
-                                if(pos[0] >= 86 && pos[0] <= 148) {
-                                    tooltip.html(fullFieldNames[1] + ": " + d); 
+                                if(pos[0] >= 101 && pos[0] <= 173) {
+                                    if(!boolvarER) {
+                                        tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
+                                        + fullFieldNames[1] + " Rank: " + initialER); 
+                                    }
+                                    else {
+                                        ERVal = getER(0, boolvarER);
+                                        if(isNaN(ERVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[1] + ": " + d + "<br />"
+                                                + fullFieldNames[1] + " Rank: " + initialER); 
+                                                console.log("TEST: ", initialER);
+                                            }
+                                            else {
+                                                tooltip.html(fullFields[1] + ": " + d + "<br />"
+                                                + fullFieldNames[1] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[1] + ": " + d + "<br />"
+                                            + fullFieldNames[1] + " Rank: " + ERVal); 
+                                        }
+                                    }
+                                    boolvarER = true;
                                 }
-                                if(pos[0] >= 159 && pos[0] <= 221) {
-                                    tooltip.html(fullFieldNames[2] + ": " + d); 
+                                if(pos[0] >= 186 && pos[0] <= 258) {
+                                    if(!boolvarFSR) {
+                                        tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
+                                        + fullFieldNames[2] + " Rank: " + initialFSR); 
+                                    }
+                                    else {
+                                        FSRVal = getFSR(0, boolvarFSR);
+                                        if(isNaN(FSRVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[2] + ": " + d + "<br />"
+                                                + fullFieldNames[2] + " Rank: " + initialFSR); 
+                                                console.log("TEST: ", initialFSR);
+                                            }
+                                            else {
+                                                tooltip.html(fullFields[2] + ": " + d + "<br />"
+                                                + fullFieldNames[2] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[2] + ": " + d + "<br />"
+                                            + fullFieldNames[2] + " Rank: " + FSRVal); 
+                                        }
+                                    }
+                                    boolvarFSR = true;
                                 }
-                                if(pos[0] >= 232 && pos[0] <= 294) {
-                                    tooltip.html(fullFieldNames[3] + ": " + d); 
+                                if(pos[0] >= 271 && pos[0] <= 343) {
+                                    if(!boolvarCPF) {
+                                        tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
+                                        + fullFieldNames[3] + " Rank: " + initialCPF); 
+                                    }
+                                    else {
+                                        CPFVal = getCPF(0, boolvarCPF);
+                                        if(isNaN(CPFVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[3] + ": " + d + "<br />"
+                                                + fullFieldNames[3] + " Rank: " + initialCPF); 
+                                                console.log("TEST: ", initialCPF);
+                                            }
+                                            else {
+                                                tooltip.html(fullFields[3] + ": " + d + "<br />"
+                                                + fullFieldNames[3] + " Rank: " + "500+"); 
+                                                console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[3] + ": " + d + "<br />"
+                                            + fullFieldNames[3] + " Rank: " + CPFVal); 
+                                        }
+                                    }
+                                    boolvarCPF = true;
                                 }
-                                if(pos[0] >= 305 && pos[0] <= 367) {
-                                    tooltip.html(fullFieldNames[4] + ": " + d); 
+                                if(pos[0] >= 356 && pos[0] <= 428) {
+                                    if(!boolvarIFR) {
+                                        tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
+                                        + fullFieldNames[4] + " Rank: " + initialIFR); 
+                                    }
+                                    else {
+                                        IFRVal = getIFR(0, boolvarIFR);
+                                        if(isNaN(IFRVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[4] + ": " + d + "<br />"
+                                                + fullFieldNames[4] + " Rank: " + initialIFR); 
+                                                console.log("TEST: ", initialIFR);
+                                            }
+                                            else {
+                                            tooltip.html(fullFields[4] + ": " + d + "<br />"
+                                            + fullFieldNames[4] + " Rank: " + "500+"); 
+                                            console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[4] + ": " + d + "<br />"
+                                            + fullFieldNames[4] + " Rank: " + IFRVal); 
+                                        }
+                                    }
+                                    boolvarIFR = true;
                                 }
-                                if(pos[0] >= 378 && pos[0] <= 440) {
-                                    tooltip.html(fullFieldNames[5] + ": " + d); 
+                                if(pos[0] >= 441 && pos[0] <= 513) {
+                                    if(!boolvarISR) {
+                                        tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
+                                        + fullFieldNames[5] + " Rank: " + initialISR); 
+                                    }
+                                    else {
+                                        ISRVal = getISR(0, boolvarISR);
+                                        if(isNaN(ISRVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 90) {
+                                                tooltip.html(fullFields[5] + ": " + d + "<br />"
+                                                + fullFieldNames[5] + " Rank: " + initialISR); 
+                                                console.log("TEST: ", initialISR);
+                                            }
+                                            else {
+                                            tooltip.html(fullFields[5] + ": " + d + "<br />"
+                                            + fullFieldNames[5] + " Rank: " + "500+"); 
+                                            console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[5] + ": " + d + "<br />"
+                                            + fullFieldNames[5] + " Rank: " + ISRVal); 
+                                        }
+                                    }
+                                    boolvarISR = true;
                                 }
-                                if(pos[0] >= 451 && pos[0] <= 513) {
-                                    tooltip.html(fullFieldNames[6] + ": " + d); 
+                                if(pos[0] >= 526 && pos[0] <= 598) {
+                                    if(!boolvarIRN) {
+                                        tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
+                                        + fullFieldNames[6] + " Rank: " + initialIRN); 
+                                    }
+                                    else {
+                                        IRNVal = getIRN(0, boolvarIRN);
+                                        if(isNaN(IRNVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 96.1) {
+                                                tooltip.html(fullFields[6] + ": " + d + "<br />"
+                                                + fullFieldNames[6] + " Rank: " + initialIRN); 
+                                                console.log("TEST: ", initialIRN);
+                                            }
+                                            else {
+                                            tooltip.html(fullFields[6] + ": " + d + "<br />"
+                                            + fullFieldNames[6] + " Rank: " + "500+"); 
+                                            console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[6] + ": " + d + "<br />"
+                                            + fullFieldNames[6] + " Rank: " + IRNVal); 
+                                        }
+                                    }
+                                    boolvarIRN = true;
                                 }
-                                if(pos[0] >= 524 && pos[0] <= 586) {
-                                    tooltip.html(fullFieldNames[7] + ": " + d); 
+                                if(pos[0] >= 611 && pos[0] <= 683) {
+                                    if(!boolvarGER) {
+                                        tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
+                                        + fullFieldNames[7] + " Rank: " + initialGER); 
+                                    }
+                                    else {
+                                        GERVal = getGER(0, boolvarGER);
+                                        if(isNaN(GERVal)) {
+                                            if(selectedUni == "Massachusetts Institute of Technology (MIT) " && d == 100) {
+                                                tooltip.html(fullFields[7] + ": " + d + "<br />"
+                                                + fullFieldNames[7] + " Rank: " + initialGER); 
+                                                console.log("TEST: ", initialGER);
+                                            }
+                                            else {
+                                            tooltip.html(fullFields[7] + ": " + d + "<br />"
+                                            + fullFieldNames[7] + " Rank: " + "500+"); 
+                                            console.log("TEST1: ", "500+");
+                                            }
+                                        }
+                                        else {
+                                            tooltip.html(fullFieldNames[7] + ": " + d + "<br />"
+                                            + fullFieldNames[7] + " Rank: " + GERVal); 
+                                        }
+                                    }
+                                    boolvarGER = true;
                                 }
                                 return tooltip.style("visibility", "visible");
                             })
@@ -210,22 +449,121 @@
                             .on("mouseout", function() {
                                 return tooltip.style("visibility", "hidden");
                             });
-    
 
                     // Update the old bars height
                     bars
                         .transition().duration(250)
-                        .attr("y", function(d,i) { return yScale(d); })
-                        .attr("height", function(d,i) { return height - yScale(d); });
+                        .attr("y", function(d,i) { 
+                            console.log("Testing", arRank);
+                            getAR(arRank, false);
+                            getER(erRank, false);
+                            getFSR(fsrRank, false);
+                            getCPF(cpfRank, false);
+                            getIFR(ifrRank, false);
+                            getISR(isrRank, false);
+                            getIRN(irnRank, false);
+                            getGER(gerRank, false);
+                            return yScale(d); 
+                        })
+                        .attr("height", function(d,i) { 
+                            return height - yScale(d); 
+                        });
 
                     // Remove old ones
                     bars.exit().remove();
                 };
-
+                var ReturningAR;
+                function getAR(AR, bool) {
+                    if(bool == true) {
+                        console.log(ReturningAR);
+                        return ReturningAR;
+                    }
+                    else {
+                        console.log("Testing", AR)
+                        ReturningAR = AR;
+                    }
+                }
+                var ReturningER;
+                function getER(ER, bool) {
+                    if(bool == true) {
+                        console.log(ReturningER);
+                        return ReturningER;
+                    }
+                    else {
+                        console.log("Testing", ER)
+                        ReturningER = ER;
+                    }
+                }
+                var ReturningFSR;
+                function getFSR(FSR, bool) {
+                    if(bool == true) {
+                        console.log(ReturningFSR);
+                        return ReturningFSR;
+                    }
+                    else {
+                        console.log("Testing", FSR)
+                        ReturningFSR = FSR;
+                    }
+                }
+                var ReturningCPF;
+                function getCPF(CPF, bool) {
+                    if(bool == true) {
+                        console.log(ReturningCPF);
+                        return ReturningCPF;
+                    }
+                    else {
+                        console.log("Testing", CPF)
+                        ReturningCPF = CPF;
+                    }
+                }
+                var ReturningIFR;
+                function getIFR(IFR, bool) {
+                    if(bool == true) {
+                        console.log(ReturningIFR);
+                        return ReturningIFR;
+                    }
+                    else {
+                        console.log("Testing", IFR)
+                        ReturningIFR = IFR;
+                    }
+                }
+                var ReturningISR;
+                function getISR(ISR, bool) {
+                    if(bool == true) {
+                        console.log(ReturningISR);
+                        return ReturningISR;
+                    }
+                    else {
+                        console.log("Testing", ISR)
+                        ReturningISR = ISR;
+                    }
+                }
+                var ReturningIRN;
+                function getIRN(IRN, bool) {
+                    if(bool == true) {
+                        console.log(ReturningIRN);
+                        return ReturningIRN;
+                    }
+                    else {
+                        console.log("Testing", IRN)
+                        ReturningIRN = IRN;
+                    }
+                }
+                var ReturningGER;
+                function getGER(GER, bool) {
+                    if(bool == true) {
+                        console.log(ReturningGER);
+                        return ReturningGER;
+                    }
+                    else {
+                        console.log("Testing", GER)
+                        ReturningGER = GER;
+                    }
+                }
                 // Handler for dropdown value change
                 var dropdownChange = function() {
                     var newUniSelected = d3.select(this).property('value'), newData = universityMap[newUniSelected];
-                    updateBars(newData);
+                    updateBars(newData, newUniSelected);
                 };
 
                 // function to sort the dropdown alphabetically
@@ -244,7 +582,7 @@
                 var dropdown = d3.select("#dropdown")
                     .insert("select", "svg")
                     .on("change", dropdownChange);
-
+                var uni;
                 dropdown.selectAll("option")
                     .data(uniNames)
                     .enter().append("option").sort()
@@ -255,10 +593,12 @@
                         });
 
                 var initialData = universityMap[uniNames[0]];
-                updateBars(initialData);
+                var selectedUni = uniNames[0]
+                updateBars(initialData, selectedUni);
             };
         </script>
         <script>
+/* CHOROPLETH STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!*/
             const svg = d3.select("svg"),
                 width = svg.attr("width"),
                 height = svg.attr("height"),
@@ -449,9 +789,9 @@
             }
         </script>
 
-        <!-- TO BE CHANGED-->
         <script>
-              // load the CSV
+/* BAR CHART AT BOTTOM STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!!!*/
+            // load the CSV as before
             var fileName = "universityRankings.csv";
             // array of the values for the barchart
             var fields = ["ar score",
@@ -462,10 +802,6 @@
             "isr score",
             "irn score",
             "ger score"];
-            var fullFieldNames = 
-            ["Academic Reputation", "Employer Reputation", "Faculty Student Ratio",
-            "Citations per Faculty", "International Faculty Ratio", "International Students Ratio",
-            "International Research Network", "Employment Outcomes"];
             d3.csv(fileName, function(error, data) {
                 var universityMap = {};
                 data.forEach(function(d) {
@@ -528,10 +864,10 @@
                 
                 xAxisHandleForUpdate.append("text")
                     .attr("y", 30)
-                    .attr("x", 320)
+                    .attr("x", 745)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
-                    .text("Ranking Criteria")
+                    .text("Top 50 Universities")
                     .style("fill", "#000");
 
                 // Make y-axis
@@ -545,7 +881,7 @@
                 yAxisHandleForUpdate.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", -40)
-                    .attr("x", -120)
+                    .attr("x", -20)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Score out out of 100")
