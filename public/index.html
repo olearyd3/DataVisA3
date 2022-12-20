@@ -21,8 +21,8 @@
         </div>
         <div class = "flexdiv">
             <div id='visualisation-container'>
-                
                 <div id='dropdown'></div>
+                <div id="totalRank"></div>
             </div>
             <div id="middle">
             </div>
@@ -219,6 +219,7 @@
                     var irnRank = categoryRanks[selectedUni][7];
                     var gerRank = categoryRanks[selectedUni][8];
                     var totalScore = categoryRanks[selectedUni][9];
+                    document.getElementById("totalRank").innerHTML = "Overall rank: " + categoryRanks[selectedUni][0];
                     //console.log("AR RANK", arRank);
                     // add new bars for any updated data
                     bars.enter()
@@ -237,13 +238,13 @@
                             .on("mouseover", function(d) {
                                 // get the coordinates of the mouse
                                 let pos = d3.mouse(this);
-                                console.log(pos[0]);
+                                //console.log(pos[0]);
                                 // loops to ensure the correct value is displayed for correct bar in tooltip (here to line 452)
                                 if(pos[0] >= 16 && pos[0] <= 88) {
                                     if(!boolvar) {
                                         tooltip.html(fullFieldNames[0] + ": " + d + "<br />"
                                         + fullFields[0] + " Rank: " + initialAR); 
-                                        console.log("TEST: ", initialAR);
+                                       // console.log("TEST: ", initialAR);
                                     }
                                     else {
                                         ARVal = getAR(0, boolvar);
@@ -487,11 +488,11 @@
                 var ReturningAR;
                 function getAR(AR, bool) {
                     if(bool == true) {
-                        console.log(ReturningAR);
+                        //console.log(ReturningAR);
                         return ReturningAR;
                     }
                     else {
-                        console.log("Testing", AR)
+                        //console.log("Testing", AR)
                         ReturningAR = AR;
                     }
                 }
@@ -499,11 +500,11 @@
                 var ReturningER;
                 function getER(ER, bool) {
                     if(bool == true) {
-                        console.log(ReturningER);
+                        //console.log(ReturningER);
                         return ReturningER;
                     }
                     else {
-                        console.log("Testing", ER)
+                        //console.log("Testing", ER)
                         ReturningER = ER;
                     }
                 }
@@ -511,11 +512,11 @@
                 var ReturningFSR;
                 function getFSR(FSR, bool) {
                     if(bool == true) {
-                        console.log(ReturningFSR);
+                        //console.log(ReturningFSR);
                         return ReturningFSR;
                     }
                     else {
-                        console.log("Testing", FSR)
+                        //console.log("Testing", FSR)
                         ReturningFSR = FSR;
                     }
                 }
@@ -523,11 +524,11 @@
                 var ReturningCPF;
                 function getCPF(CPF, bool) {
                     if(bool == true) {
-                        console.log(ReturningCPF);
+                        //console.log(ReturningCPF);
                         return ReturningCPF;
                     }
                     else {
-                        console.log("Testing", CPF)
+                        //console.log("Testing", CPF)
                         ReturningCPF = CPF;
                     }
                 }
@@ -535,11 +536,11 @@
                 var ReturningIFR;
                 function getIFR(IFR, bool) {
                     if(bool == true) {
-                        console.log(ReturningIFR);
+                        //console.log(ReturningIFR);
                         return ReturningIFR;
                     }
                     else {
-                        console.log("Testing", IFR)
+                        //console.log("Testing", IFR)
                         ReturningIFR = IFR;
                     }
                 }
@@ -547,11 +548,11 @@
                 var ReturningISR;
                 function getISR(ISR, bool) {
                     if(bool == true) {
-                        console.log(ReturningISR);
+                        //console.log(ReturningISR);
                         return ReturningISR;
                     }
                     else {
-                        console.log("Testing", ISR)
+                        //console.log("Testing", ISR)
                         ReturningISR = ISR;
                     }
                 }
@@ -559,11 +560,11 @@
                 var ReturningIRN;
                 function getIRN(IRN, bool) {
                     if(bool == true) {
-                        console.log(ReturningIRN);
+                        //console.log(ReturningIRN);
                         return ReturningIRN;
                     }
                     else {
-                        console.log("Testing", IRN)
+                        //console.log("Testing", IRN)
                         ReturningIRN = IRN;
                     }
                 }
@@ -571,11 +572,11 @@
                 var ReturningGER;
                 function getGER(GER, bool) {
                     if(bool == true) {
-                        console.log(ReturningGER);
+                        //console.log(ReturningGER);
                         return ReturningGER;
                     }
                     else {
-                        console.log("Testing", GER)
+                        //console.log("Testing", GER)
                         ReturningGER = GER;
                     }
                 }
@@ -614,6 +615,8 @@
                             // return the name of the university
                             return d; 
                         });
+
+                document.getElementById("totalRank").innerHTML = "Overall rank: " + categoryRanks[uniNames[0]][0];
                 // get the values for the initial display
                 var initialData = universityMap[uniNames[0]];
                 var selectedUni = uniNames[0]

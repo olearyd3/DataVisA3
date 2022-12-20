@@ -5,6 +5,11 @@ h1 {
     font-size: 22px;
 }
 
+#totalRank {
+    padding-top: 8px;
+    text-align: center;
+}
+
 .headingsDiv {
     clear:both;
     padding-bottom: 50px;
@@ -53,7 +58,7 @@ body {
 }
 
 #dropdown {
-    padding-left: 125px;
+    text-align: center;
 }
 
 #dropdown2 {
