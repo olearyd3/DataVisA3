@@ -749,6 +749,11 @@
                     })
                     .style("opacity", 1)
                     .on("mouseover", function(d) {
+                        // change name from England to UK --- CORRECTNESS IS IMPORTANT
+                        if(d.properties.name == "England") {
+                            ToolTip.html("United Kingdom" + ": " + d.total); 
+                            return ToolTip.style("visibility", "visible");
+                        }
                         ToolTip.html(d.properties.name + ": " + d.total); 
                         return ToolTip.style("visibility", "visible");
                     })
